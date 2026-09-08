@@ -129,7 +129,7 @@ const ProfileHeader = props => {
     });
     buttons.push({
       name: 'Collectibles',
-      url: `https://collectibles.zawg.ca?user=${store.userId}`,
+      url: `/collectibles?userId=${store.userId}`,
     });
     if (!isOwnProfile) {
       buttons.push({
@@ -206,12 +206,13 @@ const ProfileHeader = props => {
               </div> : (!store.status || !store.status.status) ? <p>&emsp;</p> : <p className={s.userStatus}>&quot;{store.status.status}&quot;</p>
               }
               <div className='row'>
+                <RelationshipStatistics id='rap' label='Total RAP' value={store.totalRap} userId={store.userId} href={`/collectibles?userId=${store.userId}`}/>
                 <RelationshipStatistics id='friends' label='Friends' value={store.friends?.length} userId={store.userId}/>
                 <RelationshipStatistics id='followers' label='Followers' value={store.followersCount} userId={store.userId}/>
                 <RelationshipStatistics id='followings' label='Following' value={store.followingsCount} userId={store.userId}/>
                 {
                   showButtons && <>
-                    <div className='col-6 col-lg-2 offset-lg-2 pe-1'>
+                    <div className='col-6 col-lg-2 pe-1'>
                       <MessageButton/>
                     </div>
                     <div className='col-6 col-lg-2 ps-1'>

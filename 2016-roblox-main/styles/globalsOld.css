@@ -45,7 +45,7 @@ p > a,
 a,
 /*a:active,*/
 .fake-link {
-	color: #0055b3; /*Orignial: #0055b3;*/
+	color: #7B1FA2; /*Orignial: #7B1FA2;*/
 	text-decoration: none !important;
 	cursor: pointer;
 }
@@ -64,7 +64,7 @@ a.normal {
 	color: #000;
 }
 a.normal:hover {
-	color: '#0055b3';
+	color: '#7B1FA2';
 }
 
 html {

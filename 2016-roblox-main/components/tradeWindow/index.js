@@ -4,68 +4,108 @@ import { createUseStyles } from "react-jss";
 import { counterTrade, createTrade, getTradeDetails } from "../../services/trades";
 import { getUserInfo } from "../../services/users";
 import AuthenticationStore from "../../stores/authentication";
-import useButtonStyles from "../../styles/buttonStyles";
-import ActionButton from "../actionButton";
-import Robux from "../catalogDetailsPage/components/robux";
-import InventoryWithPagination from "./components/inventoryWithPagination";
-import OfferRequest from "./components/offerRequest";
+import InventorySection from "./components/inventorySection";
+import OfferPanel from "./components/offerPanel";
 import TradeWindowStore from "./stores/tradeWindowStore";
 
-const useStyles = createUseStyles({
-  '@global': {
-    '.navbar-wrapper-main': {
-      display: 'none!important',
-    },
-    'footer': {
-      display: 'none!important',
-    }
+const usePageStyles = createUseStyles({
+  page: {
+    padding: '24px 24px 68px',
+    minHeight: 'calc(100vh - 88px)',
   },
-  wrapper: {
-    marginTop: '10px',
-  },
-  exitText: {
-    float: 'right',
-    marginBottom: 0,
-    cursor: 'pointer',
-  },
-  exitButton: {
-    marginLeft: '4px',
-    fontWeight: 600,
-    color: 'white',
-    background: '#666',
-    borderRadius: '100%',
-    paddingLeft: '5px',
-    paddingRight: '5px',
-  },
-  offerRequestCard: {
-    background: '#e1e1e1',
-    width: '100%',
-    border: '1px solid #d0d0d0',
-    borderRadius: '2px',
-    padding: '8px 6px',
-  },
-  buttonWrapper: {
+  shell: {
+    maxWidth: '1210px',
     margin: '0 auto',
-    maxWidth: '160px',
-    display: 'block',
   },
-  sendButton: {
-    fontSize: '22px',
+  backLink: {
+    fontSize: '15px',
+    color: '#191919',
+    textDecoration: 'none',
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: '6px',
+    marginBottom: '14px',
+    '&:hover': {
+      color: '#000',
+      textDecoration: 'underline',
+    },
+  },
+  backLinkArrow: {
+    fontSize: '18px',
+    lineHeight: '1',
+  },
+  title: {
+    fontSize: '26px',
     fontWeight: 600,
-    paddingTop: '8px',
-    paddingBottom: '8px',
+    color: '#191919',
+    margin: '0 0 24px',
   },
-  container: {
-    minWidth: '800px',
-    overflow: 'auto',
-    background: '#fff',
+  content: {
+    display: 'grid',
+    gridTemplateColumns: 'minmax(0,704px) minmax(340px,390px)',
+    gap: '28px',
+    alignItems: 'start',
   },
-  feedbackWrapper: {
-    padding: '4px',
-    border: '1px solid red',
-    background: '#fbe7e5',
+  inventoryColumn: {
+    minWidth: 0,
   },
-})
+  builderColumn: {
+    minWidth: 0,
+  },
+  divider: {
+    height: '1px',
+    background: '#e5e5e5',
+    margin: '28px 0',
+  },
+  makeOfferWrapper: {
+    marginTop: '20px',
+  },
+  makeOfferButton: {
+    width: '100%',
+    display: 'block',
+    padding: '12px 16px',
+    fontSize: '17px',
+    fontWeight: 600,
+    color: '#fff',
+    borderRadius: '3px',
+    border: 'none',
+    cursor: 'pointer',
+    background: '#00a000',
+    transition: 'background 0.15s',
+    '&:hover': {
+      background: '#008a00',
+    },
+  },
+  makeOfferDisabled: {
+    background: '#bfbfbf',
+    cursor: 'not-allowed',
+    '&:hover': {
+      background: '#bfbfbf',
+    },
+  },
+  feedbackBox: {
+    padding: '10px 14px',
+    borderRadius: '3px',
+    marginTop: '12px',
+    fontSize: '14px',
+  },
+  feedbackError: {
+    background: '#fde8e8',
+    color: '#c0392b',
+    border: '1px solid #f1a9a0',
+  },
+  feedbackSuccess: {
+    background: '#e6f4ea',
+    color: '#1e7e34',
+    border: '1px solid #a3d9b1',
+  },
+  feeNote: {
+    fontSize: '12px',
+    color: '#999',
+    margin: '8px 0 0',
+    textAlign: 'center',
+  },
+});
 
 const TradeWindow = props => {
   const store = TradeWindowStore.useContainer();
@@ -77,6 +117,8 @@ const TradeWindow = props => {
 
   const [name, setName] = useState(null);
   const [locked, setLocked] = useState(false);
+  const [localFeedback, setLocalFeedback] = useState(null);
+
   useEffect(() => {
     if (!userId) return
     getUserInfo({ userId }).then(info => {
@@ -90,7 +132,6 @@ const TradeWindow = props => {
     getTradeDetails({
       tradeId: sessionId,
     }).then((d) => {
-      console.log('[info] countering trade. id=' + d.id)
       store.setCounterId(d.id);
       for (const item of d.offers) {
         let isMine = item.user.id === auth.userId;
@@ -113,94 +154,89 @@ const TradeWindow = props => {
     })
   }, [sessionId, auth.userId]);
 
-  const s = useStyles();
-  const buttonStyles = useButtonStyles();
+  const s = usePageStyles();
 
   if (!userId || !name || !store.partnerUserId) return null;
-  return <div className={s.wrapper}>
-    <div className={'container' + ' ' + s.container}>
-      <div className='row'>
-        <div className='col-6'>
-          <p className='mb-0'><span className='font-size-18 fw-700'>TRADING</span> with {name}</p>
+
+  const isLoggedIn = auth.userId !== null;
+
+  const handleSendRequest = () => {
+    if (locked) return;
+    store.setFeedback(null);
+    setLocalFeedback(null);
+    if (store.requestItems.length === 0 || store.offerItems.length === 0) {
+      store.setFeedback(`Your must request and offer must both contain at least one item.`)
+      return;
+    }
+    setLocked(true);
+    let promise = null;
+    let request = {
+      offerUserId: auth.userId,
+      offerUserAssets: store.offerItems.map(v => v.userAssetId),
+      offerRobux: store.offerRobux,
+      requestUserId: userId,
+      requestUserAssets: store.requestItems.map(v => v.userAssetId),
+      requestRobux: store.requestRobux,
+    }
+    if (store.counterId) {
+      request.tradeId = store.counterId;
+      promise = counterTrade(request);
+    } else {
+      promise = createTrade(request)
+    }
+    promise.then(result => {
+      setLocalFeedback({ type: 'success', text: 'Your trade request has been sent.' });
+    }).catch(e => {
+      let msg = e.response?.data?.errors[0]?.message;
+      store.setFeedback(msg || e.message);
+    }).finally(() => {
+      setLocked(false);
+    })
+  };
+
+  return <div className={s.page}>
+    <div className={s.shell}>
+      <a className={s.backLink} href='/My/Trades.aspx'>
+        <span className={s.backLinkArrow}>‹</span>
+        <span>Back to Trades List</span>
+      </a>
+      <h1 className={s.title}>Trade with {name}</h1>
+
+      <div className={s.content}>
+        <div className={s.inventoryColumn}>
+          <InventorySection mode='Offer' />
+          <div className={s.divider}></div>
+          <InventorySection mode='Request' />
         </div>
-        <div className='col-6'>
-          <p className={s.exitText} onClick={() => {
-            window.close();
-          }}>Exit Trading <span className={s.exitButton}>X</span></p>
-        </div>
-      </div>
-      <div className='row mt-3'>
-        <div className='col-4'>
-          <div className={s.offerRequestCard}>
-            <OfferRequest mode='Offer'></OfferRequest>
-            <div className='mt-4'>&emsp;</div>
-            <div className='row mt-4 mb-4'>
-              <div className='col-12'>
-                <div className='divider-top'></div>
-              </div>
-            </div>
-            <div className='mt-4'>&emsp;</div>
-            <OfferRequest mode='Request'></OfferRequest>
-            <div className='mt-4 mb-4'>&emsp;</div>
-            <div className='mt-4'>&emsp;</div>
-            <div className={s.buttonWrapper}>
-              <ActionButton label='Send Request' className={buttonStyles.buyButton + ' ' + s.sendButton} onClick={() => {
-                if (locked) return;
-                store.setFeedback(null);
-                if (store.requestItems.length === 0 || store.offerItems.length === 0) {
-                  store.setFeedback(`Your must request and offer must both contain at least one item.`)
-                  return;
-                }
-                setLocked(true);
-                let promise = null;
-                let request = {
-                  offerUserId: auth.userId,
-                  offerUserAssets: store.offerItems.map(v => v.userAssetId),
-                  offerRobux: store.offerRobux,
-                  requestUserId: userId,
-                  requestUserAssets: store.requestItems.map(v => v.userAssetId),
-                  requestRobux: store.requestRobux,
-                }
-                if (store.counterId) {
-                  request.tradeId = store.counterId;
-                  // @ts-ignore
-                  promise = counterTrade(request);
-                } else {
-                  promise = createTrade(request)
-                }
-                promise.then(result => {
-                  // Trade sent
-                  alert('Your trade request has been sent.');
-                  window.close();
-                }).catch(e => {
-                  let msg = e.response?.data?.errors[0]?.message;
-                  store.setFeedback(msg || e.message);
-                }).finally(() => {
-                  setLocked(false);
-                })
-              }}></ActionButton>
-            </div>
+
+        <div className={s.builderColumn}>
+          <OfferPanel mode='Offer' />
+          <div className={s.divider}></div>
+          <OfferPanel mode='Request' />
+
+          <div className={s.makeOfferWrapper}>
+            <button
+              className={s.makeOfferButton + (isLoggedIn ? '' : ' ' + s.makeOfferDisabled)}
+              disabled={!isLoggedIn || locked}
+              title={isLoggedIn ? '' : 'You need to be logged in to trade.'}
+              onClick={handleSendRequest}
+            >
+              Make Offer
+            </button>
           </div>
-          {
-            store.feedback && <div className={s.feedbackWrapper + ' mt-2'}>
-              <p className='mb-0'>{store.feedback}</p>
-            </div>
-          }
-        </div>
-        <div className='col-8'>
-          <InventoryWithPagination mode='Offer'></InventoryWithPagination>
-          <div className='mt-4 mb-4 divider-top'>
-          </div>
-          <InventoryWithPagination mode='Request'></InventoryWithPagination>
-        </div>
-      </div>
-      <div className='row'>
-        <div className='col-12'>
-          <p className='mb-0 fw-400 font-size-12 mt-2'><span className='fw-700'>*</span><span className='lighten-3'> A 30% fee will be taken from the amount.</span></p>
+
+          {store.feedback && <div className={s.feedbackBox + ' ' + s.feedbackError}>
+            <p style={{ margin: 0 }}>{store.feedback}</p>
+          </div>}
+          {localFeedback && <div className={s.feedbackBox + ' ' + (localFeedback.type === 'error' ? s.feedbackError : s.feedbackSuccess)}>
+            <p style={{ margin: 0 }}>{localFeedback.text}</p>
+          </div>}
+
+          <p className={s.feeNote}>* A 30% fee will be taken from the offer amount.</p>
         </div>
       </div>
     </div>
-  </div >
+  </div>
 }
 
 export default TradeWindow;

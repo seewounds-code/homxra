@@ -157,7 +157,7 @@ const wardrobeItems = [
 const useWardrobeStyles = createUseStyles({
   categoryEntry: {
     cursor: 'pointer',
-    color: '#0055b3',
+    color: '#7B1FA2',
     textAlign: 'center',
     marginBottom: 0,
   },
@@ -174,7 +174,7 @@ const useWardrobeStyles = createUseStyles({
   },
   pageEnabled: {
     cursor: 'pointer',
-    color: '#0055b3',
+    color: '#7B1FA2',
   },
   pageDisabled: {
     color: 'inherit',

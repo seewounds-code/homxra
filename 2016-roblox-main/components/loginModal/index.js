@@ -37,9 +37,9 @@ const useLoginModalStyles = createUseStyles({
     },
   },
   btnPrimary: {
-    background: '#00A2FF',
+    background: '#9C27B0',
     '&:hover': {
-      background: '#32B5FF',
+      background: '#AB47BC',
     },
   },
   btnSecondary: {
@@ -50,7 +50,11 @@ const useLoginModalStyles = createUseStyles({
     },
   },
   forgotPass: {
-    color: '#00A2FF',
+    color: '#9C27B0',
+  },
+  discordLogin: {
+    color: '#5865F2',
+    fontWeight: 600,
   },
 });
 
@@ -90,7 +94,15 @@ const LoginModal = props => {
           }}>Log In</button>
         </div>
         <div className='col-6'>
-          <button className={`btn ${s.btnSecondary} ${s.btn}`}>Sign up</button>
+          <button className={`btn ${s.btnSecondary} ${s.btn}`} onClick={(e) => {
+            e.preventDefault();
+            window.location.href = '/signup';
+          }}>Sign up</button>
+        </div>
+      </div>
+      <div className='row mt-2'>
+        <div className='col-12'>
+          <a className={s.discordLogin} href='/login-with-discord'>Login with Discord</a>
         </div>
       </div>
       <div className='row mt-2'>

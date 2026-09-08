@@ -27,7 +27,7 @@ const useStyles = createUseStyles({
             borderRadius: 20,
         },
         "& input:checked+label": {
-            backgroundColor: "#0074BD",
+            backgroundColor: "#6A1B9A",
             color: "#fff",
         }
     }

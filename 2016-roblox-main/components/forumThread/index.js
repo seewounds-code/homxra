@@ -18,7 +18,7 @@ import {getUserInfo} from "../../services/users";
 
 const useStyles = createUseStyles({
   forumHeader: {
-    background: '#29508d',
+    background: '#6A1B9A',
   },
   avatarHead: {
     width: '150px',

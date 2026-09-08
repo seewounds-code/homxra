@@ -154,8 +154,8 @@ const useCardStyles = createUseStyles({
         borderRadius: 3,
         lineHeight: "100%!important",
         "&:hover": {
-            backgroundColor: "#32B5FF",
-            borderColor: "#32B5FF",
+            backgroundColor: "#AB47BC",
+            borderColor: "#AB47BC",
             color: "#fff",
             boxShadow: "0 1px 3px rgba(150,150,150,0.74)",
         }

@@ -79,7 +79,7 @@ const useStyles = createUseStyles({
         },
         
         'input[type="range"]::-ms-fill-lower': {
-            background: '#00A2FF',
+            background: '#9C27B0',
             border: '0 solid #000',
             borderRadius: '6px',
             boxShadow: '0 1px 4px 0 rgba(25,25,25,0.3)',
@@ -98,7 +98,7 @@ const useStyles = createUseStyles({
         },
         
         'input[type="range"]::-moz-range-progress': {
-            backgroundColor: '#00A2FF',
+            backgroundColor: '#9C27B0',
             height: '6px',
             borderRadius: '6px',
             cursor: 'pointer',
@@ -118,7 +118,7 @@ const useStyles = createUseStyles({
             '-webkit-transition': 'box-shadow 200ms ease',
             '-o-transition': 'box-shadow 200ms ease',
             transition: 'box-shadow 200ms ease',
-            border: '2px solid #00A2FF',
+            border: '2px solid #9C27B0',
             height: '24px',
             width: '24px',
             borderRadius: '24px',
@@ -134,7 +134,7 @@ const useStyles = createUseStyles({
             '-webkit-transition': 'box-shadow 200ms ease',
             '-o-transition': 'box-shadow 200ms ease',
             transition: 'box-shadow 200ms ease',
-            border: '2px solid #00A2FF',
+            border: '2px solid #9C27B0',
             height: '24px',
             width: '24px',
             borderRadius: '24px',
@@ -148,7 +148,7 @@ const useStyles = createUseStyles({
             '-webkit-transition': 'box-shadow 200ms ease',
             '-o-transition': 'box-shadow 200ms ease',
             transition: 'box-shadow 200ms ease',
-            border: '2px solid #00A2FF',
+            border: '2px solid #9C27B0',
             height: '24px',
             width: '24px',
             borderRadius: '24px',
@@ -198,7 +198,7 @@ function Slider({ className, step, min, max, value, setValue, changeValue, disab
             const updateProgress = () => {
                 const percentage = (100 * (slider.value - slider.min)) / (slider.max - slider.min);
                 slider.style.setProperty('--progress', `${percentage}%`);
-                slider.style.setProperty('--progress-color', disabled ? "#ADADAD" : "#00A2FF");
+                slider.style.setProperty('--progress-color', disabled ? "#ADADAD" : "#9C27B0");
             };
             slider.addEventListener('input', updateProgress);
             updateProgress();

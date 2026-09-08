@@ -27,10 +27,10 @@ const useButtonStyles = createUseStyles({
     width: '100%',
     paddingTop: '5px',
     paddingBottom: '5px',
-    background: 'linear-gradient(0deg, rgba(8,79,192,1) 0%, rgba(5,103,234,1) 100%)', // #0567ea #084fc0
-    border: '1px solid #084ea6',
+    background: 'linear-gradient(0deg, rgba(123,31,162,1) 0%, rgba(156,39,176,1) 100%)', // #0567ea #084fc0
+    border: '1px solid #6A1B9A',
     '&:hover': {
-      background: 'linear-gradient(0deg, rgba(2,73,198,1) 0%, rgba(7,147,253,1) 100%); ',
+      background: 'linear-gradient(0deg, rgba(74,20,140,1) 0%, rgba(171,71,188,1) 100%); ',
     },
   },
   badPurchaseRow: {

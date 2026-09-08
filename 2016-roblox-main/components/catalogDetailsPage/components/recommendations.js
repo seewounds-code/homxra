@@ -1,50 +1,86 @@
 import { useEffect, useState } from "react"
 import { createUseStyles } from "react-jss"
-import {getItemUrl, getRecommendations, itemNameToEncodedName} from "../../../services/catalog"
+import {getItemUrl, getRecommendations} from "../../../services/catalog"
 import CreatorLink from "../../creatorLink"
 import ItemImage from "../../itemImage"
 import Link from "../../link";
+import Robux from "./robux";
 
 const useEntryStyles = createUseStyles({
-  creator: {
-    fontSize: '12px',
-    color: '#999',
-    marginTop: '2px',
+  card: {
+    background: '#fafafa',
+    border: '1px solid #eee',
+    borderRadius: '4px',
+    padding: '10px',
+    textAlign: 'center',
+    height: '100%',
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    '&:hover': {
+      boxShadow: '0 1px 6px 0 rgba(25,25,25,0.25)',
+    },
   },
   image: {
+    width: '100%',
     maxWidth: '110px',
     display: 'block',
-    margin: '0 auto',
+    margin: '0 auto 8px',
+  },
+  name: {
+    fontSize: '13px',
+    fontWeight: 600,
+    color: '#191919',
+    marginBottom: '4px',
+    lineHeight: '1.3',
+    width: '100%',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  creator: {
+    fontSize: '12px',
+    color: '#757575',
+    marginBottom: '4px',
+  },
+  price: {
+    fontSize: '13px',
+    marginTop: 'auto',
   },
 })
 
 const RecommendationEntry = props => {
   const s = useEntryStyles();
-  return <div className='col-4 col-lg-2'>
-    <div className={s.image}>
-      <ItemImage id={props.id}/>
+  return <div className='col-6 col-md-3 col-lg'>
+    <div className={s.card}>
+      <div className={s.image}>
+        <ItemImage id={props.id}/>
+      </div>
+      <p className={s.name}>
+        <Link href={getItemUrl({assetId: props.id, name: props.name})}>
+          <a>
+            {props.name}
+          </a>
+        </Link>
+      </p>
+      <p className={s.creator}>
+        <CreatorLink id={props.creatorId} type={props.creatorType} name={props.creatorName}/>
+      </p>
+      <p className={s.price}>
+        {props.price !== null && props.price !== undefined ?
+          <Robux>{props.price.toLocaleString()}</Robux> :
+          <span className='text-muted'>Free</span>}
+      </p>
     </div>
-    <p className='mb-0 text-center'>
-      <Link href={getItemUrl({assetId: props.id, name: props.name})}>
-        <a>
-          {props.name}
-        </a>
-      </Link>
-    </p>
-    <p className={`${s.creator} mb-0 text-center`}>
-
-      Creator: <CreatorLink id={props.creatorId} type={props.creatorType} name={props.creatorName}/>
-    </p>
   </div>
 }
 
 const useRecommenndationStyles = createUseStyles({
   row: {
-    '@media (min-width: 500px)': {
-      '& >div': {
-        width: '20%',
-      },
-    }
+    '& > div': {
+      marginBottom: '10px',
+    },
   }
 });
 
@@ -69,8 +105,12 @@ const Recommendations = props => {
   return <div className={`row ${s.row}`}>
     {
       recommendations && recommendations.map((v) => {
-        return <RecommendationEntry key={v.item.assetId} id={v.item.assetId} name={v.item.name} creatorId={v.creator.creatorId} creatorType={v.creator.creatorType} creatorName={v.creator.name}/>
+        const item = v.item || {};
+        return <RecommendationEntry key={item.assetId} id={item.assetId} name={item.name} creatorId={v.creator.creatorId} creatorType={v.creator.creatorType} creatorName={v.creator.name} price={item.price}/>
       })
+    }
+    {
+      recommendations && recommendations.length === 0 ? <div className='col-12'><p className='text-center text-muted mb-0'>No recommendations found.</p></div> : null
     }
   </div>
 }

@@ -13,7 +13,7 @@ import Search from "./components/search";
 
 const useNavBarStyles = createUseStyles({
   navbar: {
-    backgroundColor: p => p.theme === themeType.obc2016 ? '#393939' : '#0074BD',
+    backgroundColor: p => p.theme === themeType.obc2016 ? '#393939' : '#6A1B9A',
     paddingTop: '6px',
     paddingBottom: '3px',
   },

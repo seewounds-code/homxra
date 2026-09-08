@@ -24,7 +24,7 @@ const useSuggestionEntryStyles = createUseStyles({
     fontWeight: 400,
     color: 'rgb(52, 52, 52)',
     '&:hover': {
-      boxShadow: '4px 0 0 0 #00a2ff inset',
+      boxShadow: '4px 0 0 0 #9C27B0 inset',
     },
   },
   link: {

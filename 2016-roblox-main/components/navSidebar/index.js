@@ -33,7 +33,7 @@ const useNavSideBarStyles = createUseStyles({
   },
   upgradeNowButton: {
     marginTop: '10px',
-    background: '#01a2fd',
+    background: '#9C27B0',
     fontSize: '15px',
     fontWeight: 500,
     width: '100%',
@@ -43,7 +43,7 @@ const useNavSideBarStyles = createUseStyles({
     color: 'white',
     borderRadius: '4px',
     '&:hover': {
-      background: '#3ab8ff',
+      background: '#AB47BC',
     },
   },
 });

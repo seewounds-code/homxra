@@ -40,7 +40,7 @@ const UserAdvertisement = props => {
       const imageElements = doc.getElementsByTagName('img');
       const aTags = doc.getElementsByTagName('a');
       if (!imageElements.length || !aTags.length) {
-        console.error('[error] could not get an element from iframe:', imageElements, aTags);
+        // No sponsored ads are configured, so nothing to render.
         return;
       }
       const imageUrl = imageElements[0].getAttribute('src');

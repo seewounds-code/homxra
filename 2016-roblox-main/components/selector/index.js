@@ -17,12 +17,12 @@ const useSelectorStyles = createUseStyles({
     userSelect: 'none',
     cursor: 'pointer',
     '&:hover': {
-      background: '#01a2fd',
+      background: '#9C27B0',
       color: '#ffffff',
     },
   },
   selectorOpen: {
-    background: '#01a2fd',
+    background: '#9C27B0',
     color: '#ffffff',
   },
   selectorCaret: {
@@ -41,7 +41,7 @@ const useSelectorStyles = createUseStyles({
     userSelect: 'none',
     fontSize: '16px',
     '&:hover': {
-      boxShadow: '4px 0 0 0 #00a2ff inset',
+      boxShadow: '4px 0 0 0 #9C27B0 inset',
     },
   },
 });

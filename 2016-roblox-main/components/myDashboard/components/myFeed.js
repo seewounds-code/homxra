@@ -36,11 +36,11 @@ span.xsmall {
   font-size: 12px;
 }
 a {
-  color: #00a2ff;
+  color: #9C27B0;
   text-decoration: none;
 }
 a:visited {
-  color: #00a2ff;
+  color: #9C27B0;
 }
 li.list-item {
   padding-bottom: 20px;

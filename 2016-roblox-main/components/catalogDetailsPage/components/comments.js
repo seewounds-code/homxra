@@ -147,7 +147,7 @@ const CommentEntry = props => {
 
 const useCommentStyles = createUseStyles({
   loadMore: {
-    color: '#0055b3',
+    color: '#7B1FA2',
     cursor: 'pointer',
   },
 })

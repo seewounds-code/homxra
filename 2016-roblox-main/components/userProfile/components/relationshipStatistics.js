@@ -16,7 +16,7 @@ const useStyles = createUseStyles({
     textAlign: 'center',
     fontSize: '20px',
     '&> a': {
-      color: '#00A2FF',
+      color: '#9C27B0',
       '&:hover': {
         textDecoration: 'underline!important',
       }
@@ -25,13 +25,14 @@ const useStyles = createUseStyles({
 });
 
 const RelationshipStatistics = props => {
-  const { id, label, value, userId } = props;
+  const { id, label, value, userId, href } = props;
   const s = useStyles();
+  const target = href ?? `/users/${userId}/friends#!${id}`;
 
   return <div className='col-12 col-lg-2'>
     <p className={s.statHeader}>{label}</p>
     <p className={s.statValue}>
-      <Link href={`/users/${userId}/friends#!${id}`}>
+      <Link href={target}>
         <a>
           {Number.isSafeInteger(value) ? abbreviateNumber(value) : '...'}
         </a>

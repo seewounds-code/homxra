@@ -50,7 +50,7 @@ const useEntryStyles = createUseStyles({
     color: '#666',
   },
   assetType: {
-    color: '#0055b3',
+    color: '#7B1FA2',
   },
   assetTypeWrapper: {
     fontSize: '12px',

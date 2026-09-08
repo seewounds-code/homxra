@@ -1,14 +1,14 @@
 import React from "react";
-import MyMoney from "../../components/myMoney";
-import MoneyPageStore from "../../components/myMoney/stores/moneyPageStore";
 import TradeStore from "../../components/myMoney/stores/tradeStore";
+import ThumbnailStore from "../../stores/thumbnailStore";
+import TradesPage from "../../components/tradesPage";
 
 const MyTradesPage = props => {
-  return <MoneyPageStore.Provider>
+  return <ThumbnailStore.Provider>
     <TradeStore.Provider>
-      <MyMoney type='Trade Items'></MyMoney>
+      <TradesPage />
     </TradeStore.Provider>
-  </MoneyPageStore.Provider>
+  </ThumbnailStore.Provider>
 }
 
 export default MyTradesPage;

@@ -40,7 +40,7 @@ const useOutfitEntryStyles = createUseStyles({
     margin: 0,
     cursor: 'pointer',
     lineHeight: 'normal',
-    color: '#0055b3',
+    color: '#7B1FA2',
   },
 });
 

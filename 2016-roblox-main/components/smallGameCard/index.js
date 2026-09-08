@@ -39,7 +39,7 @@ const useStyles = createUseStyles({
     color: '#c3c3c3',
     fontSize: '13px',
     '&>a': {
-      color: '#00a2ff',
+      color: '#9C27B0',
       '&:hover': {
         textDecoration: 'underline!important',
       },

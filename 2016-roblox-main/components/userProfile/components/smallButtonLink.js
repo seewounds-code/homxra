@@ -6,14 +6,14 @@ const useStyles = createUseStyles({
     textAlign: 'center',
   },
   buttonWrapper: {
-    background: '#00A2FF',
+    background: '#9C27B0',
     width: '100%',
     color: 'white',
     textAlign: 'center',
     padding: '5px 10px',
     borderRadius: '4px',
     '&:hover': {
-      background: '#32B5FF',
+      background: '#AB47BC',
       boxShadow: '0 1px 3px rgb(150 150 150 / 74%)',
     },
   },

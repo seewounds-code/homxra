@@ -90,7 +90,7 @@ const GroupSquareStat = props => {
 
 const useGroupSquareStyles = createUseStyles({
   iconCard: {
-    background: '#0074bd',
+    background: '#6A1B9A',
     borderRadius: 0,
     height: '100%',
   },

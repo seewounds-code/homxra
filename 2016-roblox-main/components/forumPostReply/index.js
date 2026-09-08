@@ -9,7 +9,7 @@ import ForumContainer from "../forumContainer";
 
 const useStyles = createUseStyles({
   subheaderCard: {
-    background: '#29508d',
+    background: '#6A1B9A',
   },
   leftTable: {
     width: '100px',

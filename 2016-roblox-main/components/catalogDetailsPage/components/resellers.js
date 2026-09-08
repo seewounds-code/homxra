@@ -6,22 +6,68 @@ import ActionButton from "../../actionButton";
 import CreatorLink from "../../creatorLink";
 import CatalogDetailsPage from "../stores/catalogDetailsPage";
 import CatalogDetailsPageModal from "../stores/catalogDetailsPageModal";
-import BuyItemModal from "./buyItemModal";
-import PlayerImage from "../../playerImage";
+import ThumbnailStore from "../../../stores/thumbnailStore";
 import Robux from "./robux";
 import useButtonStyles from "../../../styles/buttonStyles";
 
 const useSellerEntryStyles = createUseStyles({
+  entry: {
+    display: 'flex',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: '14px',
+    padding: '12px 0',
+    borderBottom: '1px solid #f2f2f2',
+    '&:last-of-type': {
+      borderBottom: 'none',
+    },
+  },
+  avatarWrapper: {
+    width: '48px',
+    height: '48px',
+    borderRadius: '50%',
+    overflow: 'hidden',
+    flexShrink: '0',
+    background: '#eee',
+    border: '1px solid #ddd',
+  },
+  avatar: {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+    display: 'block',
+  },
+  sellerInfo: {
+    flex: '1',
+    minWidth: '0',
+  },
+  sellerName: {
+    fontSize: '15px',
+    fontWeight: 600,
+    marginBottom: '2px',
+    color: '#191919',
+  },
+  sellerMeta: {
+    color: '#757575',
+    fontSize: '13px',
+  },
+  serial: {
+    color: '#191919',
+    fontWeight: 600,
+  },
+  price: {
+    color: '#008000',
+    fontSize: '16px',
+    fontWeight: 600,
+    minWidth: '90px',
+    textAlign: 'right',
+  },
   button: {
     fontSize: '14px',
-    marginTop: '20px',
-    paddingLeft: '8px',
-    paddingRight: '8px',
-  },
-  imageContainer: {
-    maxWidth: '50px',
-    display: 'block',
-    margin: '0 auto',
+    marginTop: '0',
+    paddingLeft: '16px',
+    paddingRight: '16px',
+    minWidth: '110px',
   },
   takeOffSale: {
     background: 'grey',
@@ -38,26 +84,26 @@ const SellerEntry = props => {
   const store = CatalogDetailsPage.useContainer();
   const modalStore = CatalogDetailsPageModal.useContainer();
   const [locked, setLocked] = useState(false);
+  const thumbs = ThumbnailStore.useContainer();
 
   const buttonStyles = useButtonStyles();
-  return <div className='row'>
-    <div className={`col-4 col-lg-3`}>
-      <div className={s.imageContainer}>
-        <PlayerImage size={50} id={props.seller.id} name={props.seller.name}></PlayerImage>
-      </div>
+  const avatarUrl = thumbs.getUserHeadshot(props.seller.id) || '/img/placeholder.png';
+  return <div className={s.entry}>
+    <div className={s.avatarWrapper}>
+      <img className={s.avatar} src={avatarUrl} alt={props.seller.name} onError={e => { e.target.src = '/img/placeholder.png' }} />
     </div>
-    <div className='col-6 col-lg-6'>
-      <p className='mb-1'>
+    <div className={s.sellerInfo}>
+      <p className={s.sellerName}>
         <CreatorLink id={props.seller.id} type='User' name={props.seller.name}></CreatorLink>
       </p>
-      <p className='mb-1'>
-        <Robux>{props.price.toLocaleString()}</Robux>
-      </p>
-      <p className='mb-1'>
-        Serial {props.serialNumber || 'N/A'}
+      <p className={s.sellerMeta}>
+        Serial <span className={s.serial}>{props.serialNumber || 'N/A'}</span>
       </p>
     </div>
-    <div className='col-6 mx-auto col-lg-3 mb-4 mb-lg-0'>
+    <div className={s.price}>
+      <Robux>{props.price.toLocaleString()}</Robux>
+    </div>
+    <div>
       {
         isOwnItem ? <ActionButton disabled={locked} label='Take Off Sale' className={s.button + ' ' + s.takeOffSale} onClick={(e) => {
           e.preventDefault();
@@ -70,7 +116,7 @@ const SellerEntry = props => {
               return c.userAssetId !== props.userAssetId;
             }))
           })
-        }}></ActionButton> : <ActionButton className={s.button + ' ' + buttonStyles.buyButton} onClick={(e) => {
+        }}></ActionButton> : <ActionButton label='Buy' className={s.button + ' ' + buttonStyles.buyButton} onClick={(e) => {
           e.preventDefault();
           modalStore.openPurchaseModal(store.getPurchaseDetails(props.userAssetId), authStore.robux, authStore.tix, 1);
         }}></ActionButton>
@@ -89,7 +135,7 @@ const usePaginationStyles = createUseStyles({
     paddingRight: '5px',
   },
   linkClickable: {
-    color: '#0055b3',
+    color: '#7B1FA2',
     cursor: 'pointer',
   },
 });
@@ -169,11 +215,16 @@ const ResellersPagination = props => {
 }
 
 const useMainStyles = createUseStyles({
-  header: {
-    fontSize: '26px',
-    fontWeight: 400,
-    paddingTop: '10px',
-    paddingBottom: '10px',
+  empty: {
+    color: '#757575',
+    fontSize: '15px',
+    padding: '16px 0',
+    textAlign: 'center',
+    marginBottom: 0,
+  },
+  pagination: {
+    marginTop: '10px',
+    marginBottom: 0,
   },
 });
 
@@ -182,19 +233,13 @@ const Resellers = props => {
   const store = CatalogDetailsPage.useContainer();
   if (!store.resellers) return null;
 
-
-  return <div className='row'>
-    <div className='col-12'>
-      <h3 className={s.header}>Private Sales</h3>
-    </div>
-    <div className='col-12 divider-right'>
-      {store.allResellers && store.allResellers.length === 0 ? <p> Sorry, no one is privately selling this item at the moment. </p> : store.resellers.map(v => {
-        return <SellerEntry key={v.userAssetId} {...v}></SellerEntry>
-      })}
-      <div className='row mt-2'>
-        {store.allResellers && store.allResellers.length > 0 && <ResellersPagination></ResellersPagination>}
-      </div>
-    </div>
+  return <div>
+    {store.allResellers && store.allResellers.length === 0 ? <p className={s.empty}>No one is privately selling this item at the moment.</p> : store.resellers.map(v => {
+      return <SellerEntry key={v.userAssetId} {...v}></SellerEntry>
+    })}
+    {store.allResellers && store.allResellers.length > 0 ? <div className={s.pagination}>
+      <ResellersPagination></ResellersPagination>
+    </div> : null}
   </div>
 }
 

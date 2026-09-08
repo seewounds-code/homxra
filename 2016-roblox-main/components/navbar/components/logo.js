@@ -3,10 +3,10 @@ import NavigationStore from "../../../stores/navigation";
 
 const useLogoStyles = createUseStyles({
   imgDesktop: {
-    width: '118px',
+    width: '96px',
     height: '30px',
     backgroundImage: `url(/img/bb_logo.png)`,
-    backgroundSize: '118px 30px',
+    backgroundSize: '96px 30px',
     display: 'none',
     '@media(min-width: 1301px)': {
       display: 'block',

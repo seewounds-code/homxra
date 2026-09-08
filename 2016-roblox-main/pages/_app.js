@@ -58,7 +58,7 @@ function RobloxApp({ Component, pageProps }) {
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin={''} />
       <title>{pageProps.title}</title>
-      <link rel='icon' type="image/vnd.microsoft.icon" href='/favicon.ico' />
+      <link rel='icon' type="image/png" href='/favicon.png' />
       <meta name='viewport' content='width=device-width, initial-scale=1' />
     </Head>
     <AuthenticationStore.Provider>

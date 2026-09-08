@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { createContainer } from "unstated-next";
 import getFlag from "../../../lib/getFlag";
+import { getCollectibleInventory } from "../../../services/inventory";
 import { getFollowersCount, getFollowingsCount, getFriends, getFriendStatus, isAuthenticatedUserFollowingUserId } from "../../../services/friends";
 import { getUserGames } from "../../../services/games";
 import { getUserGroups } from "../../../services/groups";
@@ -22,6 +23,7 @@ const UserProfileStore = createContainer(() => {
   const [tab, setTab] = useState('About');
   const [isFollowing, setIsFollowing] = useState(null);
   const [isVerified, setIsVerified] = useState(false);
+  const [totalRap, setTotalRap] = useState(null);
 
   useEffect(() => {
     if (!userId) return;
@@ -45,6 +47,15 @@ const UserProfileStore = createContainer(() => {
     isAuthenticatedUserFollowingUserId({
       userId,
     }).then(setIsFollowing);
+    getCollectibleInventory({
+      userId,
+      limit: 1,
+      cursor: '',
+    }).then(d => {
+      setTotalRap(d.totalRap || 0);
+    }).catch(e => {
+      setTotalRap(null);
+    });
   }, [userId]);
 
   return {
@@ -86,6 +97,8 @@ const UserProfileStore = createContainer(() => {
     setIsFollowing,
 	
 	isVerified,
+
+    totalRap,
 
     getFriendStatus: (authenticatedUserId) => {
       getFriendStatus({ authenticatedUserId, userId }).then(setFriendStatus);

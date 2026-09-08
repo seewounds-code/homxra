@@ -10,16 +10,58 @@ import Robux from "./robux";
 import OffsaleDeadline from "./offsaleDeadline";
 
 const useBestPriceStyles = createUseStyles({
-  text: {
-    fontSize: '14px',
+  wrapper: {
+    background: '#fff',
+    border: '1px solid #e5e5e5',
+    borderRadius: '4px',
+    padding: '14px 16px',
+    marginBottom: '14px',
+  },
+  label: {
+    color: '#757575',
+    fontSize: '13px',
+    fontWeight: 600,
+    textTransform: 'uppercase',
+    letterSpacing: '0.5px',
     marginBottom: '4px',
-    textAlign: 'center',
-    marginTop: '4px',
+  },
+  price: {
+    color: '#008000',
+    fontWeight: 700,
+    fontSize: '26px',
+    lineHeight: '1.2',
+    marginBottom: '2px',
+  },
+  robuxIcon: {
+    display: 'inline-block',
+    background: 'url("/img/img-robux.png")',
+    backgroundSize: 'contain',
+    width: '26px',
+    height: '18px',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center',
+    marginRight: '6px',
+    verticalAlign: 'baseline',
+  },
+  priceValue: {
+    fontSize: '32px',
+  },
+  seeMore: {
+    color: '#7B1FA2',
+    fontSize: '13px',
+    cursor: 'pointer',
+    '&:hover': {
+      textDecoration: 'underline',
+    },
   },
   noSellers: {
-    textAlign: 'center',
-    marginTop: '30px',
-    marginBottom: '30px',
+    color: '#757575',
+    fontSize: '14px',
+    marginTop: '6px',
+  },
+  purchaseButton: {
+    width: '100%',
+    marginTop: '12px',
   },
 });
 
@@ -28,32 +70,42 @@ const BestPriceEntry = props => {
   const store = CatalogDetailsPage.useContainer();
   const lowestSeller = store.getPurchaseDetails();
   if (!lowestSeller) {
-    return <p className={s.noSellers}> No one is currently selling this item. </p>
+    return <div className={s.wrapper}>
+      <p className={s.label}>Best Price</p>
+      <p className={s.noSellers}>No one is currently selling this item.</p>
+    </div>
   }
   const lowestPrice = lowestSeller.price;
-  return <p className={s.text}>
-    <Robux prefix="Best Price: ">{lowestPrice}</Robux>
-  </p>
+  return <div className={s.wrapper}>
+    <p className={s.label}>Best Price</p>
+    <p className={s.price}>
+      <span className={s.robuxIcon}></span>
+      <span className={s.priceValue}>{lowestPrice.toLocaleString()}</span>
+    </p>
+  </div>
 }
 
 const useBuyButtonStyles = createUseStyles({
   wrapper: {
     width: '100%',
-    border: '1px solid #a7a7a7',
-    background: '#e1e1e1',
+    border: '1px solid #e5e5e5',
+    background: '#fafafa',
+    borderRadius: '4px',
+    padding: '10px 14px',
+    marginBottom: '14px',
   }
 });
 
 const PrivateSellersCount = props => {
   const store = CatalogDetailsPage.useContainer();
-  return <p className='mt-0 mb-0 text-center'>
-    <a className='a'>See all private sellers ({store.resellersCount || 0})</a>
+  return <p className='mt-2 mb-1 text-center'>
+    <a className={props.className}>See more Resellers ({store.resellersCount || 0})</a>
   </p>
 }
 
 const useSaleCountStyles = createUseStyles({
   text: {
-    color: '#666',
+    color: '#757575',
     fontSize: '12px',
   }
 })
@@ -62,12 +114,10 @@ const SaleCount = props => {
   const store = CatalogDetailsPage.useContainer();
   const s = useSaleCountStyles();
   const statusText = store.details?.assetType === 21 ? 'Awarded' : 'Sold';
-  console.log('type:', store.details?.assetType);
-  console.log('sales:', store.saleCount);
   
   return (
-    <p className={'mt-2 mb-2 text-center ' + s.text}>
-      ( <span className='text-black'>{store.saleCount}</span> {statusText})
+    <p className={'mt-2 mb-0 text-center ' + s.text}>
+      <span className='text-black'>{store.saleCount}</span> {statusText}
     </p>
   );
 }
@@ -77,7 +127,7 @@ const OwnedCount = props => {
   const s = useSaleCountStyles();
   if (!store.ownedCopies || store.ownedCopies.length === 0) return null;
   return <p className={'mt-2 mb-0 text-center ' + s.text}>
-    ( <span className='text-black'>{store.ownedCopies.length}</span> Owned)
+    <span className='text-black'>{store.ownedCopies.length}</span> Owned
   </p>
 }
 
@@ -124,7 +174,7 @@ const BuyAction = props => {
       if (currency === 2) {
         return 'Buy with Tx';
       }
-      return 'Buy with R$';
+      return 'Buy Now';
   })();
 
   if (store.isResellable) {
@@ -150,7 +200,7 @@ const BuyAction = props => {
 
 const useOrTabStyles = createUseStyles({
   wrapper: {
-    borderBottom: '1px solid #a7a7a7',
+    borderBottom: '1px solid #e5e5e5',
     marginBottom: '10px',
   },
   label: {
@@ -160,7 +210,7 @@ const useOrTabStyles = createUseStyles({
     textAlign: 'center',
   },
   labelBg: {
-    background: '#e1e1e1',
+    background: '#fafafa',
     position: 'relative',
     bottom: '-10px',
   },
@@ -198,31 +248,31 @@ const BuyButton = props => {
   const showOrTab = !isResellAsset && showBuyButton && showBuyTicketsButton;
   const hasOffsaleLabel = store.offsaleDeadline !== null && !isResellAsset && (showBuyButton || showBuyTicketsButton);
 
-  return <div className={s.wrapper}>
-    <div>
-      {hasOffsaleLabel ? <OffsaleDeadline offsaleDeadline={store.offsaleDeadline} /> : null}
+  return <div>
+    {isResellAsset ? <BestPriceEntry details={store.details}/> : null}
+    <div className={s.wrapper}>
+      <div>
+        {hasOffsaleLabel ? <OffsaleDeadline offsaleDeadline={store.offsaleDeadline} /> : null}
+      </div>
+      <div>
+        {!isResellAsset  ? <div className='mt-2'/> : null}
+        {showBuyButton ? <BuyAction currency={1} /> : null}
+      </div>
+      <div>
+        {showOrTab ? <PurchaseWithRobuxOrTicketsLabel /> : null}
+        {showBuyTicketsButton ? <BuyAction currency={2} /> : null}
+      </div>
+      <div>
+        {isResellAsset ? <PrivateSellersCount className='text-center'/> : null}
+      </div>
+      <div>
+        {isResellAsset ? <OwnedCount/> : null}
+      </div>
     </div>
     <div>
-      {isResellAsset ? <BestPriceEntry details={store.details}/> : null}
+      {isResellAsset ? <SaleCount/> : null}
     </div>
-    <div>
-      {!isResellAsset  ? <div className='mt-2'/> : null}
-      {showBuyButton ? <BuyAction currency={1} /> : null}
-    </div>
-    <div>
-      {showOrTab ? <PurchaseWithRobuxOrTicketsLabel /> : null}
-      {showBuyTicketsButton ? <BuyAction currency={2} /> : null}
-    </div>
-    <div>
-      {isResellAsset ? <PrivateSellersCount details={store.details}/> : null}
-    </div>
-    <div>
-      {isResellAsset ? <OwnedCount/> : null}
-    </div>
-    <div>
-      <SaleCount/>
-    </div>
-  </div >
+  </div>
 }
 
 export default BuyButton;

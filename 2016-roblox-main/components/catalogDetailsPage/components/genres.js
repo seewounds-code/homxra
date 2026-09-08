@@ -8,7 +8,7 @@ const useStyles = createUseStyles({
   },
   genre: {
     fontSize: '12px',
-    color: '#0055B3',
+    color: '#7B1FA2',
   },
 });
 

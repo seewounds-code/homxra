@@ -23,7 +23,7 @@ const useDropdownStyles = createUseStyles({
     fontSize: '16px',
     '&:hover': {
       background: '#eaeaea',
-      borderLeft: '4px solid #0074BD',
+      borderLeft: '4px solid #6A1B9A',
     },
     '&:hover > a': {
       marginLeft: '-4px',

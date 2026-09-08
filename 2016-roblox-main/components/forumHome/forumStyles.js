@@ -5,7 +5,7 @@ const useForumStyles = createUseStyles({
 
   },
   headerRow: {
-    background: '#29508d',
+    background: '#6A1B9A',
     '& th': {
       fontSize: '1.25rem',
       color: '#fff',

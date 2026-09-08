@@ -5,16 +5,38 @@ import {createUseStyles} from "react-jss";
 
 const useStyles = createUseStyles({
   wrapper: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '6px',
+    background: 'rgba(0,0,0,0.55)',
+    borderRadius: '4px',
+    padding: '5px 10px',
   },
   favoriteStar: {
     display: 'inline-block',
     width: '16px',
     height: '16px',
     background: 'url("/img/FavoriteStar.png")',
-    marginBottom: '-2px',
+    backgroundSize: 'contain',
+    cursor: 'pointer',
+    marginBottom: '0',
+    filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.5))',
+  },
+  favoritedStar: {
+    filter: 'drop-shadow(0 0 3px rgba(255,204,0,0.9)) saturate(1.4)',
   },
   favoriteCount: {
-    textAlign: 'center',
+    color: '#fff',
+    fontSize: '13px',
+    fontWeight: 600,
+  },
+  favoriteLink: {
+    color: '#fff',
+    fontSize: '13px',
+    cursor: 'pointer',
+    '&:hover': {
+      textDecoration: 'underline',
+    },
   },
 });
 
@@ -43,29 +65,43 @@ const Favorite = props => {
   }, [props.favoriteCount, props.assetId, auth.userId]);
 
   return <div className={s.wrapper}>
-    <div className={s.favoriteCount}><div className={s.favoriteStar}/>
-       {favoriteCount.toLocaleString()}
-      {
-        isFavorited !== null ? <span className='ms-1'>
-          <a href="#" onClick={e => {
-            e.preventDefault();
-            if (locked) return;
-            setLocked(true);
-            setIsFavorited(!isFavorited);
-            setFavoriteCount(isFavorited ? favoriteCount-1 : favoriteCount+1);
-            if (isFavorited) {
-              deleteFavorite({userId: auth.userId, assetId}).finally(() => {
-                setLocked(false);
-              })
-            }else{
-              createFavorite({userId: auth.userId, assetId}).finally(() => {
-                setLocked(false);
-              })
-            }
-          }}>{isFavorited ? 'Unfavorite' : 'Favorite'}</a>
-        </span> : null
+    <a href="#" onClick={e => {
+      e.preventDefault();
+      if (!auth.userId || locked) return;
+      setLocked(true);
+      setIsFavorited(!isFavorited);
+      setFavoriteCount(isFavorited ? favoriteCount-1 : favoriteCount+1);
+      if (isFavorited) {
+        deleteFavorite({userId: auth.userId, assetId}).finally(() => {
+          setLocked(false);
+        })
+      }else{
+        createFavorite({userId: auth.userId, assetId}).finally(() => {
+          setLocked(false);
+        })
       }
-    </div>
+    }}>
+      <span className={s.favoriteStar + ' ' + (isFavorited ? s.favoritedStar : '')}/>
+    </a>
+    <span className={s.favoriteCount}>{favoriteCount.toLocaleString()}</span>
+    {
+      isFavorited !== null ? <a href="#" className={s.favoriteLink} onClick={e => {
+        e.preventDefault();
+        if (!auth.userId || locked) return;
+        setLocked(true);
+        setIsFavorited(!isFavorited);
+        setFavoriteCount(isFavorited ? favoriteCount-1 : favoriteCount+1);
+        if (isFavorited) {
+          deleteFavorite({userId: auth.userId, assetId}).finally(() => {
+            setLocked(false);
+          })
+        }else{
+          createFavorite({userId: auth.userId, assetId}).finally(() => {
+            setLocked(false);
+          })
+        }
+      }}>{isFavorited ? 'Unfavorite' : 'Favorite'}</a> : null
+    }
   </div>
 }
 

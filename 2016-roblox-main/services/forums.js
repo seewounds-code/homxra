@@ -52,13 +52,13 @@ export const getPostsByUser = ({userId, offset, limit}) => {
 const ForumsCategories = [
   {
     id: 1,
-    name: 'ROBLOX',
+    name: 'Homoru',
     subCategories: [
       {
         id: 46,
-        name: 'All Things ROBLOX',
+        name: 'All Things Homoru',
         description:
-          'The area for discussions purely about ROBLOX – the features, the games, and company news.',
+          'The area for discussions purely about Homoru – the features, the games, and company news.',
       },
       {
         id: 14,
@@ -70,13 +70,13 @@ const ForumsCategories = [
         id: 21,
         name: 'Suggestions & Ideas',
         description:
-          'Do you have a suggestion and ideas for ROBLOX? Share your feedback here.',
+          'Do you have a suggestion and ideas for Homoru? Share your feedback here.',
       },
       {
         id: 54,
-        name: 'BLOXFaires & ROBLOX events',
+        name: 'Homoru Events',
         description:
-          'Check here to see the crazy things ROBLOX is doing. Contest information can be found here. ROBLOX is going to be at various Maker Faires and conferences around the globe. Discuss those events here!',
+          'Check here to see the crazy things Homoru is doing. Contest information can be found here. Homoru is going to be at various Maker Faires and conferences around the globe. Discuss those events here!',
       },
     ],
   },
@@ -86,9 +86,9 @@ const ForumsCategories = [
     subCategories: [
       {
         id: 13,
-        name: 'ROBLOX Talk',
+        name: 'Homoru Talk',
         description:
-          'A popular hangout where ROBLOXians talk about various topics.',
+          'A popular hangout where Homoru users talk about various topics.',
       },
       {
         id: 18,
@@ -100,13 +100,13 @@ const ForumsCategories = [
         id: 32,
         name: 'Clans & Guilds',
         description:
-          'Talk about what’s going on in your Clans, Groups, Companies, and Guilds, and about the Groups feature in general.',
+          'Talk about what\'s going on in your Clans, Groups, Companies, and Guilds, and about the Groups feature in general.',
       },
       {
         id: 35,
         name: `Let's Make a Deal`,
         description:
-          'A fast paced community dedicated to mastering the Limited Trades and Sales market, and divining the subtleties of the ROBLOX Currency Exchange.',
+          'A fast paced community dedicated to mastering the Limited Trades and Sales market, and divining the subtleties of the Homoru Currency Exchange.',
       },
     ],
   },

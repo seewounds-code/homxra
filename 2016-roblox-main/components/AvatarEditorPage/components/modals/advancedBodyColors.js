@@ -23,7 +23,7 @@ const useStyles = createUseStyles({
         lineHeight: "100%!important",
 		backgroundColor: "#007bff",
 		"&:hover": {
-            backgroundColor: "#0056b3",
+            backgroundColor: "#4A148C",
         },
     },
     containerClass: {

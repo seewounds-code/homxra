@@ -11,7 +11,7 @@ import Friends from "./components/friends";
 import Groups from "./components/groups";
 import ProfileHeader from "./components/profileHeader";
 import RobloxBadges from "./components/robloxBadges";
-import Badges from "./components/Badges";
+import Badges from "./components/badges";
 import Statistics from "./components/stats";
 import Tabs from "./components/tabs";
 import TabSection from "./components/tabSection";
